@@ -1,0 +1,63 @@
+class ComplexNUm
+  @@add_counter = 0
+  @@multiplication_counter = 0
+
+  attr_accessor :real, :img
+
+  def initialize(real, img)
+    @real = real
+    @img = img
+  end
+
+  def +(other)
+    @@add_counter += 1
+    real = @real + other.real
+    img  = @img  + other.img
+    ComplexNUm.new(real, img)
+  end
+
+  def *(other)
+    @@multiplication_counter += 1
+    real = @real * other.real - @img * other.img
+    img  = @real * other.img + @img * other.real
+    ComplexNUm.new(real, img)
+  end
+
+  def self.bulk_add(cns)
+    result = cns.first
+    cns.drop(1).each do |cn|
+      result += cn
+    end
+    result
+  end
+
+  def self.bulk_multiply(cns)
+    result = cns.first
+    cns.drop(1).each do |cn|
+      result *= cn
+    end
+    result
+  end
+
+  def to_s
+    "(#{real} + #{img}i)"
+  end
+
+  def self.get_state
+    puts "Add counter: #{@@add_counter}"
+    puts "Multiplication counter: #{@@multiplication_counter}"
+  end
+end
+
+ComplexNUm1 = ComplexNUm.new(10, 8)
+ComplexNUm2 = ComplexNUm.new(5, 7)
+
+puts ComplexNUm1 + ComplexNUm2
+puts ComplexNUm1 * ComplexNUm2
+
+array = [ComplexNUm2, ComplexNUm1, ComplexNUm1, ComplexNUm2]
+
+puts ComplexNUm.bulk_add(array)
+puts ComplexNUm.bulk_multiply(array)
+
+ComplexNUm.get_state
